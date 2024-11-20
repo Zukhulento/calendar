@@ -5,7 +5,7 @@ import { useCalendarStore, useUiStore } from "../../hooks";
 
 export const useCalendarModal = () => {
   const { isDateModalOpen, closeDateModal } = useUiStore();
-  const { activeEvent } = useCalendarStore();
+  const { activeEvent, startSavingEvent } = useCalendarStore();
   const [formSubmited, setFormSubmited] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -36,7 +36,7 @@ export const useCalendarModal = () => {
   const onCloseDateModal = () => {
     closeDateModal();
   };
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     setFormSubmited(true);
     const difference = differenceInSeconds(formValues.end, formValues.start);
@@ -63,6 +63,9 @@ export const useCalendarModal = () => {
     console.log(formValues);
 
     // TODO
+    await startSavingEvent(formValues);
+    closeDateModal();
+    setFormSubmited(false);
     // Limpieza
     // Grabar en base de datos
   };
